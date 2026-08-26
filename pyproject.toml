@@ -1,0 +1,20 @@
+[project]
+name = "rash-rolamentos"
+version = "0.1.0"
+description = "RashBot — Agente de Vendas Tecnicas B2B para a distribuidora Rash Rolamentos Industriais"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain>=1.3.17",
+    "langchain-community>=0.4.2",
+    "langchain-google-genai>=4.3.5",
+    "langgraph>=1.2.11",
+    "python-dotenv>=1.2.3",
+    "streamlit>=1.62.0",
+]
+
+[project.urls]
+Repository = "https://github.com/SueliHora/rash-rolamentos"
+
+[dependency-groups]
+dev = []
