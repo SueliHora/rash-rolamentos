@@ -15,6 +15,7 @@ Convenções:
   termos digitados sem acentuação (ex: 'motor eletrico' == 'motor elétrico').
 """
 
+import sys
 import sqlite3
 import pathlib
 import logging
@@ -28,6 +29,53 @@ logger = logging.getLogger(__name__)
 # Resolve o caminho do banco independentemente de onde o script é executado
 _PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
 DB_PATH = _PROJECT_ROOT / "data" / "rash.db"
+SCHEMA_PATH = _PROJECT_ROOT / "data" / "schema.sql"
+
+
+# ── Inicialização e Seed Automático ──────────────────────────────────────────
+
+def init_db(db_file: Optional[pathlib.Path] = None, schema_file: Optional[pathlib.Path] = None) -> None:
+    """
+    Cria a estrutura de tabelas e índices no banco de dados SQLite
+    a partir do arquivo schema.sql. Cria o diretório pai caso não exista.
+    """
+    target_db = db_file or DB_PATH
+    target_schema = schema_file or SCHEMA_PATH
+
+    target_db.parent.mkdir(parents=True, exist_ok=True)
+
+    if not target_schema.exists():
+        logger.error("Arquivo de schema não encontrado: %s", target_schema)
+        raise FileNotFoundError(f"Schema não encontrado em: {target_schema}")
+
+    with sqlite3.connect(target_db) as conn:
+        conn.execute("PRAGMA foreign_keys = ON")
+        schema_sql = target_schema.read_text(encoding="utf-8")
+        conn.executescript(schema_sql)
+        conn.commit()
+        logger.info("Schema do banco aplicado com sucesso em: %s", target_db)
+
+
+def seed_data(db_file: Optional[pathlib.Path] = None) -> int:
+    """
+    Popula o banco de dados com os rolamentos industriais do catálogo inicial.
+    Retorna a quantidade de produtos inseridos.
+    """
+    target_db = db_file or DB_PATH
+    data_dir = str(_PROJECT_ROOT / "data")
+    if data_dir not in sys.path:
+        sys.path.insert(0, data_dir)
+
+    try:
+        import seed as seed_mod
+        with sqlite3.connect(target_db) as conn:
+            conn.execute("PRAGMA foreign_keys = ON")
+            inserted = seed_mod.seed_produtos(conn, seed_mod.PRODUTOS)
+            logger.info("Catálogo inicial populado com sucesso em %s (%d produtos).", target_db, len(seed_mod.PRODUTOS))
+            return inserted
+    except Exception as exc:
+        logger.error("Erro ao popular catálogo de produtos via seed_data: %s", exc)
+        return 0
 
 
 # ── Helpers internos ──────────────────────────────────────────────────────────
@@ -44,14 +92,18 @@ def _normalize(text: str) -> str:
 def _get_connection() -> sqlite3.Connection:
     """
     Retorna uma conexão com row_factory configurada para dicts.
-    Registra a função escalar `normalize_text` para uso em queries SQL,
-    permitindo busca sem acento diretamente no SQLite.
+    Se o arquivo de banco de dados não for encontrado, cria o diretório data/
+    e executa init_db() e seed_data() automaticamente de forma resiliente.
+    Registra a função escalar `normalize_text` para buscas sem acento.
     """
     if not DB_PATH.exists():
-        raise FileNotFoundError(
-            f"Banco de dados nao encontrado: {DB_PATH}\n"
-            "Execute 'python data/seed.py' para criá-lo."
+        logger.warning(
+            "Banco de dados não encontrado em %s. Criando diretório e inicializando schema e catálogo automaticamente...",
+            DB_PATH
         )
+        init_db()
+        seed_data()
+
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row          # acesso por nome de coluna
     conn.execute("PRAGMA foreign_keys = ON")
