@@ -66,6 +66,7 @@ rash-rolamentos/
 │   ├── schema.sql              # DDL estrutural de tabelas
 │   └── seed.py                 # Script de população do catálogo
 ├── docs/
+│   ├── adr-001-stack-e-governanca.md # Registro de Decisão Arquitetural (ADR)
 │   └── PRD.md                  # Product Requirements Document
 ├── src/
 │   ├── agent.py                # Implementação do agente LangGraph
@@ -75,6 +76,7 @@ rash-rolamentos/
 │   └── test_db.py              # Testes de consistência do catálogo
 ├── .env.example                # Template de variáveis de ambiente
 ├── .gitignore                  # Arquivos ignorados pelo Git
+├── AGENTS.md                   # Diretrizes técnicas para agentes de IA
 ├── app.py                      # Interface Web Streamlit
 ├── main.py                     # Entry point alternativo
 ├── pyproject.toml              # Dependências e metadados uv
