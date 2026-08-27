@@ -46,7 +46,7 @@ Diferente de chatbots conversacionais genéricos que alucinam especificações, 
 ## Stack Tecnológica
 
 - **Gerenciador de Pacotes & Ambiente:** [uv](https://docs.astral.sh/uv/) + `pyproject.toml` (Python 3.11+)
-- **Core do Agente & Orquestração:** LangGraph / LangChain / Gemini 3.6 Flash (`langchain-google-genai`)
+- **Core do Agente & Orquestração:** LangGraph / LangChain / Gemini 1.5 Flash (`langchain-google-genai`)
 - **Camada de Dados & Catálogo:** SQLite 3 (Estrutura relacional normalizada com seeds determinísticos)
 - **Interface do Usuário (Frontend):** Streamlit com injeção de CSS customizado e componentes reativos
 - **Governança & Segurança:** Human-in-the-Loop (HITL), rastreamento de tokens por sessão e aprovação de alçadas
@@ -121,7 +121,7 @@ Edite o arquivo `.env` e configure as variáveis de ambiente:
 
 ```env
 GEMINI_API_KEY=sua_chave_do_google_ai_studio_aqui
-GEMINI_MODEL=gemini-3.6-flash
+GEMINI_MODEL=gemini-1.5-flash
 LOG_LEVEL=INFO
 ```
 

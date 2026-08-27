@@ -25,7 +25,7 @@ A **Rash Rolamentos Industriais** atua na distribuição B2B de componentes mec�
 
 ### 2.2. Orquestração com LangGraph e Tool Calling
 
-* **Decisão:** Utilizar **LangGraph** estruturado como um `StateGraph` cíclico conectado ao modelo **Google Gemini 3.6 Flash** (`langchain-google-genai`).
+* **Decisão:** Utilizar **LangGraph** estruturado como um `StateGraph` cíclico conectado ao modelo **Google Gemini 1.5 Flash** (`langchain-google-genai`).
 * **Justificativa:** O grafo define nós bem delimitados para raciocínio (`llm_node`) e execução de ferramentas determinísticas (`tools_node`). A persistência de estado em memória com `MemorySaver` (`thread_id`) viabiliza conversas multi-turnos contextuais sem perda de parâmetros técnicos coletados.
 
 ### 2.3. Trava de Governança Human-in-the-Loop (HITL) no Streamlit

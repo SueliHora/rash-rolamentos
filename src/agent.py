@@ -51,20 +51,44 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ── Variáveis de ambiente ─────────────────────────────────────────────────────
+# ── Variáveis de ambiente & Secrets ───────────────────────────────────────────
 
 # Carrega .env da raiz do projeto (dois níveis acima de src/)
 _ENV_FILE = pathlib.Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=_ENV_FILE)
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-# Modelo configurável com fallback seguro
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+
+def get_config_var(key: str, default: str = "") -> str:
+    """
+    Obtém uma configuração da variável de ambiente (os.getenv) ou dos
+    segredos do Streamlit (st.secrets), se disponível.
+    """
+    # 1. Tenta variável de ambiente do sistema / .env
+    val = os.getenv(key)
+    if val:
+        return val.strip()
+
+    # 2. Tenta Streamlit secrets (Streamlit Cloud ou .streamlit/secrets.toml)
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets") and key in st.secrets:
+            secret_val = st.secrets[key]
+            if secret_val:
+                return str(secret_val).strip()
+    except Exception:
+        pass
+
+    return default
+
+
+GEMINI_API_KEY = get_config_var("GEMINI_API_KEY", "")
+# Modelo configurável com fallback seguro para gemini-1.5-flash
+GEMINI_MODEL = get_config_var("GEMINI_MODEL", "gemini-1.5-flash")
 
 if not GEMINI_API_KEY:
     raise EnvironmentError(
         "GEMINI_API_KEY não encontrada. Crie o arquivo .env na raiz do projeto "
-        "com base no .env.example e adicione sua chave da API do Google."
+        "com base no .env.example ou defina nos secrets do Streamlit com sua chave da API do Google."
     )
 
 # ── Prompt de Sistema ─────────────────────────────────────────────────────────
@@ -147,15 +171,16 @@ class AgentState(TypedDict):
 
 def _build_llm(model_name: str = None):
     """Instancia o modelo Gemini com as ferramentas vinculadas."""
-    target_model = model_name or os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+    target_model = model_name or get_config_var("GEMINI_MODEL", "gemini-1.5-flash")
     # Garante que não haja duplicações de 'models/' ou espaços na string do modelo
     clean_model = str(target_model).strip()
     if clean_model.startswith("models/"):
         clean_model = clean_model[len("models/"):]
 
+    api_key = GEMINI_API_KEY or get_config_var("GEMINI_API_KEY", "")
     llm = ChatGoogleGenerativeAI(
         model=clean_model,
-        google_api_key=GEMINI_API_KEY,
+        google_api_key=api_key,
         temperature=0.1,
         max_retries=0,
     )
@@ -200,7 +225,7 @@ def extract_text_from_message_content(content) -> str:
 
 
 # Variável global para rastrear o modelo ativo com sucesso e modelos indisponíveis
-ACTIVE_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+ACTIVE_MODEL = get_config_var("GEMINI_MODEL", "gemini-1.5-flash")
 UNAVAILABLE_MODELS = set()
 
 
@@ -213,7 +238,7 @@ def llm_node(state: AgentState) -> dict:
     global ACTIVE_MODEL, UNAVAILABLE_MODELS
     mensagens = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
     
-    env_model = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+    env_model = get_config_var("GEMINI_MODEL", "gemini-1.5-flash")
 
     # Monta lista de prioridades de modelo evitando os sabidamente 404
     candidate_list = []
@@ -222,8 +247,8 @@ def llm_node(state: AgentState) -> dict:
     if env_model and env_model not in candidate_list and env_model not in UNAVAILABLE_MODELS:
         candidate_list.append(env_model)
 
-    for fallback in [env_model, "gemini-3.6-flash", "gemini-flash-latest", "gemini-2.5-flash"]:
-        if fallback not in candidate_list and fallback not in UNAVAILABLE_MODELS:
+    for fallback in [env_model, "gemini-1.5-flash", "gemini-2.5-flash", "gemini-flash-latest", "gemini-3.6-flash"]:
+        if fallback and fallback not in candidate_list and fallback not in UNAVAILABLE_MODELS:
             candidate_list.append(fallback)
             
     last_exception = None

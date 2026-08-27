@@ -37,10 +37,10 @@ Este projeto utiliza o **[uv](https://docs.astral.sh/uv/)** e o arquivo `pyproje
 - Sempre mantenha o `.env.example` atualizado com a lista de variáveis exigidas:
   ```env
   GEMINI_API_KEY=sua_chave_aqui
-  GEMINI_MODEL=gemini-3.6-flash
+  GEMINI_MODEL=gemini-1.5-flash
   LOG_LEVEL=INFO
   ```
-- O modelo primário configurado para chamadas do Google GenAI é `gemini-3.6-flash`.
+- O modelo primário configurado para chamadas do Google GenAI é `gemini-1.5-flash`.
 
 ---
 
