@@ -2,7 +2,7 @@
 app.py
 ======
 Rash Rolamentos Industriais — Agente de Vendas Técnicas ("Soluções em Movimento").
-Interface Web Corporativa B2B com Enquadramento Inicial, Tipografia e Responsividade Mobile Otimizadas.
+Interface Web Corporativa B2B com Enquadramento Inicial, Tipografia e Painel Operacional Otimizados.
 """
 
 import os
@@ -85,11 +85,11 @@ def get_logo_icon_base64() -> str:
 st.set_page_config(
     page_title="Rash Rolamentos Industriais — Vendas Técnicas",
     layout="wide",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="expanded",
 )
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  CSS GLOBAL — PONTO DE ENTRADA, TIPOGRAFIA, RESPONSIVIDADE MOBILE & NAV
+#  CSS GLOBAL — PONTO DE ENTRADA, TIPOGRAFIA E ESTILO CORPORATIVO DARK/NAVY
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
@@ -103,20 +103,10 @@ html, body, [class*="css"], .stMarkdown, p, div, span, label {
     color: #E2E8F0;
 }
 
-/* ── Correção do Ponto de Entrada & Header Nativo ── */
+/* ── Ocultar Header Padrão do Streamlit ── */
 header[data-testid="stHeader"],
 [data-testid="stHeader"] {
-    background: transparent !important;
-    height: 2.2rem !important;
-    z-index: 99 !important;
-}
-
-/* Deixa o botão de recolher/expandir o sidebar do Streamlit visível e elegante */
-[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] button {
-    color: #D4AF37 !important;
-    background: rgba(22, 34, 56, 0.8) !important;
-    border: 1px solid rgba(212, 175, 55, 0.3) !important;
-    border-radius: 4px !important;
+    display: none !important;
 }
 
 .main {
@@ -124,7 +114,7 @@ header[data-testid="stHeader"],
 }
 
 .block-container {
-    padding-top: 0.2rem !important;
+    padding-top: 0.25rem !important;
     padding-bottom: 3.5rem !important;
     max-width: 100% !important;
 }
@@ -142,10 +132,12 @@ header[data-testid="stHeader"],
     min-height: 100vh;
 }
 
-/* ── Barra Lateral ── */
+/* ── Barra Lateral (Compacta e Delimitada) ── */
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0D1B2A 0%, #111D2E 100%) !important;
     border-right: 1px solid rgba(212, 175, 55, 0.22) !important;
+    min-width: 280px !important;
+    max-width: 320px !important;
 }
 
 /* ── CABEÇALHO PRINCIPAL COM LOGO INTEGRADO ── */
@@ -202,12 +194,7 @@ header[data-testid="stHeader"],
     text-overflow: ellipsis;
 }
 
-/* ── BARRA DE NAVEGAÇÃO DE ABAS (MOBILE & DESKTOP) ── */
-.nav-tab-wrapper {
-    margin-bottom: 8px;
-}
-
-/* ── Mini-Painel de Métricas (2x2) ── */
+/* ── Mini-Painel de Métricas da Sidebar (2x2) ── */
 .sidebar-section-title {
     font-size: 0.72rem;
     font-weight: 700;
@@ -230,7 +217,7 @@ header[data-testid="stHeader"],
     background: #111D2E !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 6px !important;
-    padding: 6px 8px !important;
+    padding: 5px 8px !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -259,13 +246,13 @@ header[data-testid="stHeader"],
     color: #F3C64F !important;
 }
 
-/* ── EXPANDERS (Dark/Navy & Alto Contraste) ── */
+/* ── EXPANDERS DA SIDEBAR (Dark/Navy & Alto Contraste) ── */
 [data-testid="stExpander"] {
     background-color: #111D2E !important;
     border: 1px solid rgba(212, 175, 55, 0.22) !important;
     border-radius: 6px !important;
     color: #E2E8F0 !important;
-    margin-bottom: 0.40rem !important;
+    margin-bottom: 0.35rem !important;
 }
 
 [data-testid="stExpander"] summary,
@@ -290,7 +277,7 @@ header[data-testid="stHeader"],
     border-top: 1px solid rgba(212, 175, 55, 0.12) !important;
     border-bottom-left-radius: 6px !important;
     border-bottom-right-radius: 6px !important;
-    padding: 0.50rem 0.65rem !important;
+    padding: 0.45rem 0.65rem !important;
 }
 
 /* ── Cards de Cotação Pendente ── */
@@ -298,31 +285,31 @@ header[data-testid="stHeader"],
     background: rgba(17, 29, 46, 0.95) !important;
     border: 1px solid rgba(229, 184, 66, 0.35) !important;
     border-radius: 6px !important;
-    padding: 0.50rem 0.65rem !important;
-    margin-bottom: 0.40rem !important;
+    padding: 0.45rem 0.60rem !important;
+    margin-bottom: 0.35rem !important;
 }
 
 .cotacao-id {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     font-weight: 800;
     color: #E5B842 !important;
 }
 
 .cotacao-cliente {
-    font-size: 0.82rem;
+    font-size: 0.80rem;
     color: #FFFFFF !important;
     font-weight: 600;
-    margin: 2px 0;
+    margin: 1px 0;
 }
 
 .cotacao-total {
-    font-size: 0.90rem;
+    font-size: 0.88rem;
     font-weight: 800;
     color: #E5B842 !important;
 }
 
 .cotacao-data {
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     color: #94A3B8 !important;
 }
 
@@ -407,13 +394,13 @@ div[data-testid="stButton"] > button {
     background: rgba(27, 38, 59, 0.85) !important;
     color: #E2E8F0 !important;
     font-weight: 600 !important;
-    border: 1px solid rgba(212, 175, 55, 0.25) !important;
+    border: 1px solid rgba(212, 175, 55, 0.22) !important;
     border-radius: 5px !important;
-    font-size: 0.78rem !important;
+    font-size: 0.76rem !important;
     line-height: 1.2 !important;
     height: auto !important;
-    min-height: 38px !important;
-    padding: 6px 10px !important;
+    min-height: 36px !important;
+    padding: 5px 8px !important;
     white-space: normal !important;
     word-wrap: break-word !important;
     text-align: left !important;
@@ -512,24 +499,13 @@ hr {
 /* ── Ocultar elementos desnecessários ── */
 #MainMenu, footer { visibility: hidden; }
 
-/* ── DESKTOP (> 768px): Oculta barra de abas para manter painel apenas na sidebar ── */
-@media (min-width: 769px) {
-    div[data-testid="stVerticalBlock"]:has(> div > div > .mobile-nav-marker),
-    div[data-testid="stVerticalBlock"]:has(.mobile-nav-marker),
-    div[data-testid="element-container"]:has(.mobile-nav-marker),
-    div[data-testid="element-container"]:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"],
-    div:has(> .mobile-nav-marker) {
-        display: none !important;
-    }
-}
-
 /* ── RESPONSIVIDADE MOBILE (<= 768px) ── */
 @media (max-width: 768px) {
     .block-container {
         padding-left: 0.45rem !important;
         padding-right: 0.45rem !important;
-        padding-top: 0.10rem !important;
-        padding-bottom: 4.8rem !important;
+        padding-top: 0.15rem !important;
+        padding-bottom: 4.5rem !important;
     }
 
     .main-header-wrapper {
@@ -558,21 +534,9 @@ hr {
     }
 
     div[data-testid="stButton"] > button {
-        min-height: 42px !important;
+        min-height: 40px !important;
         font-size: 0.76rem !important;
         padding: 6px 8px !important;
-    }
-
-    .metrics-grid-2x2 {
-        gap: 5px !important;
-    }
-
-    .metric-card-box {
-        padding: 5px 6px !important;
-    }
-
-    .metric-card-value {
-        font-size: 0.95rem !important;
     }
 }
 </style>
@@ -674,9 +638,6 @@ def init_session():
     if "session_id" not in st.session_state:
         st.session_state.session_id = str(uuid.uuid4())[:8]
 
-    if "active_tab" not in st.session_state:
-        st.session_state.active_tab = "chat"
-
     if "agent" not in st.session_state:
         st.session_state.agent = RashBotAgent(
             thread_id=st.session_state.session_id
@@ -697,192 +658,172 @@ def init_session():
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  PAINEL OPERACIONAL MODULARIZADO (HITL, MÉTRICAS E AUDITORIA)
+#  1. BARRA LATERAL (MINI-PAINEL DE MÉTRICAS 2X2 E EXPANDERS DARK/NAVY)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def render_painel_operacional(is_sidebar: bool = False):
-    """
-    Renderiza o painel operacional completo com suporte tanto a sidebar (desktop)
-    quanto à área principal (mobile/tablet).
-    """
-    prefix = "sb" if is_sidebar else "main"
-
-    if not is_sidebar:
-        col_title, col_back = st.columns([3, 1])
-        with col_title:
-            st.markdown('<div class="sidebar-section-title" style="font-size:0.85rem;margin-top:0.2rem;">Painel Operacional & Governança</div>', unsafe_allow_html=True)
-        with col_back:
-            if st.button("💬 Ir ao Chat", key=f"btn_goto_chat_{prefix}", type="primary", use_container_width=True):
-                st.session_state.active_tab = "chat"
-                st.rerun()
-    else:
+def render_sidebar():
+    with st.sidebar:
+        # ── 1. Mini-Painel de Métricas 2x2 ───────────────────────────────────
         st.markdown('<div class="sidebar-section-title">Painel Operacional</div>', unsafe_allow_html=True)
 
-    # ── 1. Mini-Painel de Métricas 2x2 ───────────────────────────────────
-    resumo = db.resumo_banco()
-    pendentes = get_cotacoes_pendentes()
-    qtd_pendentes = len(pendentes)
+        resumo = db.resumo_banco()
+        pendentes = get_cotacoes_pendentes()
+        qtd_pendentes = len(pendentes)
 
-    total_prods = resumo.get('total_produtos', 0)
-    total_peds = resumo.get('total_pedidos', 0)
-    estoque_fmt = f"{resumo.get('estoque_total', 0):,}".replace(",", ".")
-    val_pend_color = "metric-card-value-accent" if qtd_pendentes > 0 else ""
-
-    st.markdown(f"""
-    <div class="metrics-grid-2x2">
-        <div class="metric-card-box">
-            <div class="metric-card-label">Catálogo</div>
-            <div class="metric-card-value">{total_prods}</div>
-        </div>
-        <div class="metric-card-box">
-            <div class="metric-card-label">Pedidos</div>
-            <div class="metric-card-value">{total_peds}</div>
-        </div>
-        <div class="metric-card-box">
-            <div class="metric-card-label">Estoque</div>
-            <div class="metric-card-value">{estoque_fmt}</div>
-        </div>
-        <div class="metric-card-box">
-            <div class="metric-card-label">Pendentes</div>
-            <div class="metric-card-value {val_pend_color}">{qtd_pendentes}</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    # ── 2. Aprovação de Cotações (HITL) ──────────────────────────────────
-    label_hitl = f"Cotações Pendentes ({qtd_pendentes})"
-    with st.expander(label_hitl, expanded=False):
-        if not pendentes:
-            st.caption("Nenhuma cotação aguardando aprovação humana.")
-        else:
-            for cotacao in pendentes:
-                pedido_id = cotacao["id"]
-                cliente   = cotacao["cliente_nome"]
-                total     = cotacao["total"]
-                qtd_itens = cotacao["qtd_itens"]
-                data_raw  = cotacao.get("data_criacao", "")
-
-                try:
-                    dt = datetime.strptime(data_raw[:19], "%Y-%m-%d %H:%M:%S")
-                    data_fmt = dt.strftime("%d/%m %H:%M")
-                except Exception:
-                    data_fmt = data_raw[:16] if data_raw else "—"
-
-                st.markdown(
-                    f'<div class="cotacao-card">'
-                    f'<div class="cotacao-id">COTAÇÃO #{pedido_id}</div>'
-                    f'<div class="cotacao-cliente">{cliente}</div>'
-                    f'<div class="cotacao-total">R$ {total:,.2f}'.replace(",", "X").replace(".", ",").replace("X", ".") + f'</div>'
-                    f'<div class="cotacao-data">{qtd_itens} item(ns) • {data_fmt}</div>'
-                    f'</div>',
-                    unsafe_allow_html=True,
-                )
-
-                itens = get_itens_pedido(pedido_id)
-                if itens:
-                    for item in itens:
-                        sub = item["quantidade"] * item["preco_unitario"]
-                        st.caption(f"• {item['codigo']} × {item['quantidade']} = R$ {sub:.2f}")
-
-                col_a, col_r = st.columns([1, 1])
-                with col_a:
-                    if st.button("Aprovar", key=f"ap_{pedido_id}_{prefix}", type="primary", use_container_width=True):
-                        atualizar_status_pedido(pedido_id, "APROVADO")
-                        db.registrar_auditoria(0, 0, 0.0, session_id=f"op-approve-{pedido_id}")
-                        st.success(f"Cotação #{pedido_id} aprovada com sucesso.")
-                        st.rerun()
-                with col_r:
-                    if st.button("Rejeitar", key=f"rej_{pedido_id}_{prefix}", use_container_width=True):
-                        atualizar_status_pedido(pedido_id, "REJEITADO")
-                        st.warning(f"Cotação #{pedido_id} rejeitada.")
-                        st.rerun()
-
-    # ── 3. Histórico Recente ──────────────────────────────────────────────
-    with st.expander("Histórico Recente de Pedidos", expanded=False):
-        ultimos = get_ultimos_pedidos(5)
-        if not ultimos:
-            st.caption("Nenhum pedido registrado.")
-        else:
-            for p in ultimos:
-                status_cls = {
-                    "AGUARDANDO_APROVACAO": "status-aguardando",
-                    "APROVADO": "status-aprovado",
-                    "REJEITADO": "status-rejeitado",
-                }.get(p["status"], "status-aguardando")
-
-                status_label = {
-                    "AGUARDANDO_APROVACAO": "Pendente",
-                    "APROVADO": "Aprovado",
-                    "REJEITADO": "Rejeitado",
-                }.get(p["status"], p["status"])
-
-                nome_curto = p["cliente_nome"][:16] + ("…" if len(p["cliente_nome"]) > 16 else "")
-                st.markdown(
-                    f'<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(212,175,55,0.08);">'
-                    f'<div>'
-                    f'  <span style="color:#E5B842;font-size:0.74rem;font-weight:700">#{p["id"]}</span> '
-                    f'  <span style="color:#FFFFFF;font-size:0.78rem;">{nome_curto}</span><br>'
-                    f'  <span style="color:#E5B842;font-size:0.74rem;font-weight:700">R$ {p["total"]:.2f}</span>'
-                    f'</div>'
-                    f'<span class="{status_cls}">{status_label}</span>'
-                    f'</div>',
-                    unsafe_allow_html=True,
-                )
-
-    # ── 4. Auditoria de Governança ────────────────────────────────────────
-    with st.expander("Auditoria de Governança & Custos", expanded=False):
-        audit = get_auditoria_resumo()
-        chamadas = audit.get("chamadas", 0)
-        custo_val = audit.get("custo_total", 0.0)
-        custo_str = f"${custo_val:.4f}"
+        total_prods = resumo.get('total_produtos', 0)
+        total_peds = resumo.get('total_pedidos', 0)
+        estoque_fmt = f"{resumo.get('estoque_total', 0):,}".replace(",", ".")
+        val_pend_color = "metric-card-value-accent" if qtd_pendentes > 0 else ""
 
         st.markdown(f"""
-        <div class="metrics-grid-2x2" style="margin-bottom: 0;">
+        <div class="metrics-grid-2x2">
             <div class="metric-card-box">
-                <div class="metric-card-label">Chamadas IA</div>
-                <div class="metric-card-value">{chamadas}</div>
+                <div class="metric-card-label">Catálogo</div>
+                <div class="metric-card-value">{total_prods}</div>
             </div>
             <div class="metric-card-box">
-                <div class="metric-card-label">Custo Est.</div>
-                <div class="metric-card-value">{custo_str}</div>
+                <div class="metric-card-label">Pedidos</div>
+                <div class="metric-card-value">{total_peds}</div>
+            </div>
+            <div class="metric-card-box">
+                <div class="metric-card-label">Estoque</div>
+                <div class="metric-card-value">{estoque_fmt}</div>
+            </div>
+            <div class="metric-card-box">
+                <div class="metric-card-label">Pendentes</div>
+                <div class="metric-card-value {val_pend_color}">{qtd_pendentes}</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("---")
+        st.markdown("---")
 
-    # ── 5. Controles de Sessão no Rodapé ──────────────────────────────────
-    if st.button("Reiniciar Atendimento", key=f"btn_reset_{prefix}", use_container_width=True):
-        st.session_state.agent.reset()
-        st.session_state.session_id = str(uuid.uuid4())[:8]
-        st.session_state.messages = [
-            {
-                "role": "ai",
-                "content": (
-                    "Bem-vindo à **Rash Rolamentos Industriais** — *Soluções em Movimento*.\n\n"
-                    "Assistente técnico corporativo para consulta de catálogo determinístico, "
-                    "verificação de medidas e emissão de cotações comerciais."
-                ),
-                "tools_used": [],
-            }
-        ]
-        st.session_state.active_tab = "chat"
-        st.rerun()
+        # ── 2. Aprovação de Cotações (HITL) ──────────────────────────────────
+        label_hitl = f"Cotações Pendentes ({qtd_pendentes})"
+        with st.expander(label_hitl, expanded=False):
+            if not pendentes:
+                st.caption("Nenhuma cotação aguardando aprovação humana.")
+            else:
+                for cotacao in pendentes:
+                    pedido_id = cotacao["id"]
+                    cliente   = cotacao["cliente_nome"]
+                    total     = cotacao["total"]
+                    qtd_itens = cotacao["qtd_itens"]
+                    data_raw  = cotacao.get("data_criacao", "")
 
-    active_model_name = getattr(st.session_state.get("agent"), "active_model", GEMINI_MODEL)
-    st.caption(f"Sessão: `{st.session_state.session_id}` | Modelo: `{active_model_name}`")
+                    try:
+                        dt = datetime.strptime(data_raw[:19], "%Y-%m-%d %H:%M:%S")
+                        data_fmt = dt.strftime("%d/%m %H:%M")
+                    except Exception:
+                        data_fmt = data_raw[:16] if data_raw else "—"
 
+                    st.markdown(
+                        f'<div class="cotacao-card">'
+                        f'<div class="cotacao-id">COTAÇÃO #{pedido_id}</div>'
+                        f'<div class="cotacao-cliente">{cliente}</div>'
+                        f'<div class="cotacao-total">R$ {total:,.2f}'.replace(",", "X").replace(".", ",").replace("X", ".") + f'</div>'
+                        f'<div class="cotacao-data">{qtd_itens} item(ns) • {data_fmt}</div>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
 
-def render_sidebar():
-    """Renderiza a barra lateral para telas maiores/desktop."""
-    with st.sidebar:
-        render_painel_operacional(is_sidebar=True)
+                    itens = get_itens_pedido(pedido_id)
+                    if itens:
+                        for item in itens:
+                            sub = item["quantidade"] * item["preco_unitario"]
+                            st.caption(f"• {item['codigo']} × {item['quantidade']} = R$ {sub:.2f}")
+
+                    col_a, col_r = st.columns([1, 1])
+                    with col_a:
+                        if st.button("Aprovar", key=f"ap_{pedido_id}", type="primary", use_container_width=True):
+                            atualizar_status_pedido(pedido_id, "APROVADO")
+                            db.registrar_auditoria(0, 0, 0.0, session_id=f"op-approve-{pedido_id}")
+                            st.success(f"Cotação #{pedido_id} aprovada.")
+                            st.rerun()
+                    with col_r:
+                        if st.button("Rejeitar", key=f"rej_{pedido_id}", use_container_width=True):
+                            atualizar_status_pedido(pedido_id, "REJEITADO")
+                            st.warning(f"Cotação #{pedido_id} rejeitada.")
+                            st.rerun()
+
+        # ── 3. Histórico Recente ──────────────────────────────────────────────
+        with st.expander("Histórico Recente", expanded=False):
+            ultimos = get_ultimos_pedidos(4)
+            if not ultimos:
+                st.caption("Nenhum pedido registrado.")
+            else:
+                for p in ultimos:
+                    status_cls = {
+                        "AGUARDANDO_APROVACAO": "status-aguardando",
+                        "APROVADO": "status-aprovado",
+                        "REJEITADO": "status-rejeitado",
+                    }.get(p["status"], "status-aguardando")
+
+                    status_label = {
+                        "AGUARDANDO_APROVACAO": "Pendente",
+                        "APROVADO": "Aprovado",
+                        "REJEITADO": "Rejeitado",
+                    }.get(p["status"], p["status"])
+
+                    nome_curto = p["cliente_nome"][:14] + ("…" if len(p["cliente_nome"]) > 14 else "")
+                    st.markdown(
+                        f'<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(212,175,55,0.08);">'
+                        f'<div>'
+                        f'  <span style="color:#E5B842;font-size:0.72rem;font-weight:700">#{p["id"]}</span> '
+                        f'  <span style="color:#FFFFFF;font-size:0.76rem;">{nome_curto}</span><br>'
+                        f'  <span style="color:#E5B842;font-size:0.74rem;font-weight:700">R$ {p["total"]:.2f}</span>'
+                        f'</div>'
+                        f'<span class="{status_cls}">{status_label}</span>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
+
+        # ── 4. Auditoria de Governança ────────────────────────────────────────
+        with st.expander("Auditoria de Governança", expanded=False):
+            audit = get_auditoria_resumo()
+            chamadas = audit.get("chamadas", 0)
+            custo_val = audit.get("custo_total", 0.0)
+            custo_str = f"${custo_val:.4f}"
+
+            st.markdown(f"""
+            <div class="metrics-grid-2x2" style="margin-bottom: 0;">
+                <div class="metric-card-box">
+                    <div class="metric-card-label">Chamadas IA</div>
+                    <div class="metric-card-value">{chamadas}</div>
+                </div>
+                <div class="metric-card-box">
+                    <div class="metric-card-label">Custo Est.</div>
+                    <div class="metric-card-value">{custo_str}</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # ── 5. Controles de Sessão no Rodapé ──────────────────────────────────
+        if st.button("Reiniciar Atendimento", use_container_width=True):
+            st.session_state.agent.reset()
+            st.session_state.session_id = str(uuid.uuid4())[:8]
+            st.session_state.messages = [
+                {
+                    "role": "ai",
+                    "content": (
+                        "Bem-vindo à **Rash Rolamentos Industriais** — *Soluções em Movimento*.\n\n"
+                        "Assistente técnico corporativo para consulta de catálogo determinístico, "
+                        "verificação de medidas e emissão de cotações comerciais."
+                    ),
+                    "tools_used": [],
+                }
+            ]
+            st.rerun()
+
+        # Modelo badge
+        active_model_name = getattr(st.session_state.get("agent"), "active_model", GEMINI_MODEL)
+        st.caption(f"Sessão: `{st.session_state.session_id}` | Modelo: `{active_model_name}`")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  CABEÇALHO PRINCIPAL, NAVEGAÇÃO DE ABAS & CHAT
+#  2. CABEÇALHO PRINCIPAL COM LOGO INTEGRADO & CHAT
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def render_main_header():
@@ -891,7 +832,7 @@ def render_main_header():
     if icon_b64:
         img_tag = f'<img src="data:image/png;base64,{icon_b64}" class="main-header-icon" alt="Rash Rolamentos">'
     else:
-        img_tag = '<div style="font-size:1.8rem;line-height:1;">⚙️</div>'
+        img_tag = '<div style="font-size:2rem;line-height:1;">⚙️</div>'
 
     st.markdown(f"""
     <div class="main-header-wrapper">
@@ -902,30 +843,6 @@ def render_main_header():
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-
-def render_top_navigation(qtd_pendentes: int):
-    """Renderiza barra de abas exclusiva para alternância rápida no mobile."""
-    nav_box = st.container()
-    with nav_box:
-        st.markdown('<div class="mobile-nav-marker"></div>', unsafe_allow_html=True)
-        col_chat, col_painel = st.columns([1, 1])
-
-        is_chat = (st.session_state.active_tab == "chat")
-        is_painel = (st.session_state.active_tab == "painel")
-
-        with col_chat:
-            if st.button("💬 Chat Técnico", key="tab_nav_chat", type="primary" if is_chat else "secondary", use_container_width=True):
-                if not is_chat:
-                    st.session_state.active_tab = "chat"
-                    st.rerun()
-
-        with col_painel:
-            label_painel = f"📊 Painel & Cotações ({qtd_pendentes})" if qtd_pendentes > 0 else "📊 Painel Operacional"
-            if st.button(label_painel, key="tab_nav_painel", type="primary" if is_painel else "secondary", use_container_width=True):
-                if not is_painel:
-                    st.session_state.active_tab = "painel"
-                    st.rerun()
 
 
 def extract_tool_names_from_agent_state() -> list[str]:
@@ -1059,23 +976,9 @@ def render_main_chat():
 
 def main():
     init_session()
-    
-    # Obtém cotações pendentes para badge dinâmico
-    pendentes = get_cotacoes_pendentes()
-    qtd_pendentes = len(pendentes)
-
-    # Barra lateral (desktop)
     render_sidebar()
-    
-    # Cabeçalho Principal e Navegação Responsiva
     render_main_header()
-    render_top_navigation(qtd_pendentes)
-
-    # Alternância de Visão
-    if st.session_state.active_tab == "chat":
-        render_main_chat()
-    else:
-        render_painel_operacional(is_sidebar=False)
+    render_main_chat()
 
 
 if __name__ == "__main__":
