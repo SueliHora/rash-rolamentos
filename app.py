@@ -742,7 +742,7 @@ def render_painel_operacional(is_sidebar: bool = False):
 
     # ── 2. Aprovação de Cotações (HITL) ──────────────────────────────────
     label_hitl = f"Cotações Pendentes ({qtd_pendentes})"
-    with st.expander(label_hitl, expanded=(qtd_pendentes > 0 or not is_sidebar)):
+    with st.expander(label_hitl, expanded=False):
         if not pendentes:
             st.caption("Nenhuma cotação aguardando aprovação humana.")
         else:
