@@ -512,6 +512,17 @@ hr {
 /* ── Ocultar elementos desnecessários ── */
 #MainMenu, footer { visibility: hidden; }
 
+/* ── DESKTOP (> 768px): Oculta barra de abas para manter painel apenas na sidebar ── */
+@media (min-width: 769px) {
+    div[data-testid="stVerticalBlock"]:has(> div > div > .mobile-nav-marker),
+    div[data-testid="stVerticalBlock"]:has(.mobile-nav-marker),
+    div[data-testid="element-container"]:has(.mobile-nav-marker),
+    div[data-testid="element-container"]:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"],
+    div:has(> .mobile-nav-marker) {
+        display: none !important;
+    }
+}
+
 /* ── RESPONSIVIDADE MOBILE (<= 768px) ── */
 @media (max-width: 768px) {
     .block-container {
@@ -894,24 +905,27 @@ def render_main_header():
 
 
 def render_top_navigation(qtd_pendentes: int):
-    """Renderiza barra de abas intuitiva para alternância rápida entre Chat e Painel Operacional."""
-    col_chat, col_painel = st.columns([1, 1])
+    """Renderiza barra de abas exclusiva para alternância rápida no mobile."""
+    nav_box = st.container()
+    with nav_box:
+        st.markdown('<div class="mobile-nav-marker"></div>', unsafe_allow_html=True)
+        col_chat, col_painel = st.columns([1, 1])
 
-    is_chat = (st.session_state.active_tab == "chat")
-    is_painel = (st.session_state.active_tab == "painel")
+        is_chat = (st.session_state.active_tab == "chat")
+        is_painel = (st.session_state.active_tab == "painel")
 
-    with col_chat:
-        if st.button("💬 Chat Técnico", key="tab_nav_chat", type="primary" if is_chat else "secondary", use_container_width=True):
-            if not is_chat:
-                st.session_state.active_tab = "chat"
-                st.rerun()
+        with col_chat:
+            if st.button("💬 Chat Técnico", key="tab_nav_chat", type="primary" if is_chat else "secondary", use_container_width=True):
+                if not is_chat:
+                    st.session_state.active_tab = "chat"
+                    st.rerun()
 
-    with col_painel:
-        label_painel = f"📊 Painel & Cotações ({qtd_pendentes})" if qtd_pendentes > 0 else "📊 Painel Operacional"
-        if st.button(label_painel, key="tab_nav_painel", type="primary" if is_painel else "secondary", use_container_width=True):
-            if not is_painel:
-                st.session_state.active_tab = "painel"
-                st.rerun()
+        with col_painel:
+            label_painel = f"📊 Painel & Cotações ({qtd_pendentes})" if qtd_pendentes > 0 else "📊 Painel Operacional"
+            if st.button(label_painel, key="tab_nav_painel", type="primary" if is_painel else "secondary", use_container_width=True):
+                if not is_painel:
+                    st.session_state.active_tab = "painel"
+                    st.rerun()
 
 
 def extract_tool_names_from_agent_state() -> list[str]:
