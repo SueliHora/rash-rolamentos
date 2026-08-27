@@ -147,7 +147,7 @@ class AgentState(TypedDict):
 
 def _build_llm(model_name: str = None):
     """Instancia o modelo Gemini com as ferramentas vinculadas."""
-    target_model = model_name or GEMINI_MODEL
+    target_model = model_name or os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
     # Garante que não haja duplicações de 'models/' ou espaços na string do modelo
     clean_model = str(target_model).strip()
     if clean_model.startswith("models/"):
@@ -200,7 +200,7 @@ def extract_text_from_message_content(content) -> str:
 
 
 # Variável global para rastrear o modelo ativo com sucesso e modelos indisponíveis
-ACTIVE_MODEL = GEMINI_MODEL
+ACTIVE_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 UNAVAILABLE_MODELS = set()
 
 
@@ -213,14 +213,16 @@ def llm_node(state: AgentState) -> dict:
     global ACTIVE_MODEL, UNAVAILABLE_MODELS
     mensagens = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
     
+    env_model = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+
     # Monta lista de prioridades de modelo evitando os sabidamente 404
     candidate_list = []
     if ACTIVE_MODEL and ACTIVE_MODEL not in UNAVAILABLE_MODELS:
         candidate_list.append(ACTIVE_MODEL)
-    if GEMINI_MODEL and GEMINI_MODEL not in candidate_list and GEMINI_MODEL not in UNAVAILABLE_MODELS:
-        candidate_list.append(GEMINI_MODEL)
+    if env_model and env_model not in candidate_list and env_model not in UNAVAILABLE_MODELS:
+        candidate_list.append(env_model)
 
-    for fallback in ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-1.5-flash"]:
+    for fallback in [env_model, "gemini-3.6-flash", "gemini-flash-latest", "gemini-2.5-flash"]:
         if fallback not in candidate_list and fallback not in UNAVAILABLE_MODELS:
             candidate_list.append(fallback)
             
