@@ -33,6 +33,12 @@ from agent import RashBotAgent, GEMINI_MODEL
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("rashbot.app")
 
+# ── Garantia de Inicialização do Banco de Dados ──────────────────────────────
+try:
+    db.ensure_db()
+except Exception as _exc:
+    logger.error("Erro na inicialização antecipada do banco de dados: %s", _exc)
+
 # ── Helper de Extração de Texto Limpo ─────────────────────────────────────────
 def extract_text_from_message_content(content) -> str:
     """Extrai texto em Markdown limpo do content da mensagem."""
@@ -593,74 +599,105 @@ components.html(
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def _conn() -> sqlite3.Connection:
-    conn = sqlite3.connect(db.DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+    """Retorna uma conexão segura com o banco de dados do RashBot."""
+    return db._get_connection()
 
 
 def get_cotacoes_pendentes() -> list[dict]:
-    """Retorna cotações com status AGUARDANDO_APROVACAO."""
-    with _conn() as conn:
-        rows = conn.execute("""
-            SELECT p.id, p.cliente_nome, p.cliente_contato,
-                   p.total, p.data_criacao,
-                   COUNT(i.id) as qtd_itens
-            FROM pedidos p
-            LEFT JOIN itens_pedido i ON i.pedido_id = p.id
-            WHERE p.status = 'AGUARDANDO_APROVACAO'
-            GROUP BY p.id
-            ORDER BY p.data_criacao DESC
-            LIMIT 10
-        """).fetchall()
-        return [dict(r) for r in rows]
+    """
+    Retorna cotações com status AGUARDANDO_APROVACAO.
+    Trata erros de banco/tabelas ausentes de forma resiliente, retornando lista vazia.
+    """
+    try:
+        with _conn() as conn:
+            rows = conn.execute("""
+                SELECT p.id, p.cliente_nome, p.cliente_contato,
+                       p.total, p.data_criacao,
+                       COUNT(i.id) as qtd_itens
+                FROM pedidos p
+                LEFT JOIN itens_pedido i ON i.pedido_id = p.id
+                WHERE p.status = 'AGUARDANDO_APROVACAO'
+                GROUP BY p.id
+                ORDER BY p.data_criacao DESC
+                LIMIT 10
+            """).fetchall()
+            return [dict(r) for r in rows]
+    except Exception as exc:
+        logger.error("Erro ao obter cotações pendentes (retornando lista vazia): %s", exc)
+        return []
 
 
 def get_ultimos_pedidos(limite: int = 4) -> list[dict]:
-    """Retorna os últimos pedidos cadastrados."""
-    with _conn() as conn:
-        rows = conn.execute("""
-            SELECT id, cliente_nome, status, total, data_criacao
-            FROM pedidos
-            ORDER BY data_criacao DESC
-            LIMIT ?
-        """, (limite,)).fetchall()
-        return [dict(r) for r in rows]
+    """Retorna os últimos pedidos cadastrados com fallback seguro."""
+    try:
+        with _conn() as conn:
+            rows = conn.execute("""
+                SELECT id, cliente_nome, status, total, data_criacao
+                FROM pedidos
+                ORDER BY data_criacao DESC
+                LIMIT ?
+            """, (limite,)).fetchall()
+            return [dict(r) for r in rows]
+    except Exception as exc:
+        logger.error("Erro ao obter últimos pedidos: %s", exc)
+        return []
 
 
 def get_itens_pedido(pedido_id: int) -> list[dict]:
-    """Retorna itens de um pedido com código do produto."""
-    with _conn() as conn:
-        rows = conn.execute("""
-            SELECT p.codigo, p.tipo, i.quantidade, i.preco_unitario,
-                   (i.quantidade * i.preco_unitario) as subtotal
-            FROM itens_pedido i
-            JOIN produtos p ON p.id = i.produto_id
-            WHERE i.pedido_id = ?
-        """, (pedido_id,)).fetchall()
-        return [dict(r) for r in rows]
+    """Retorna itens de um pedido com código do produto com fallback seguro."""
+    try:
+        with _conn() as conn:
+            rows = conn.execute("""
+                SELECT p.codigo, p.tipo, i.quantidade, i.preco_unitario,
+                       (i.quantidade * i.preco_unitario) as subtotal
+                FROM itens_pedido i
+                JOIN produtos p ON p.id = i.produto_id
+                WHERE i.pedido_id = ?
+            """, (pedido_id,)).fetchall()
+            return [dict(r) for r in rows]
+    except Exception as exc:
+        logger.error("Erro ao obter itens do pedido #%s: %s", pedido_id, exc)
+        return []
 
 
 def atualizar_status_pedido(pedido_id: int, novo_status: str) -> None:
-    """Atualiza o status de um pedido (ação humana)."""
-    with _conn() as conn:
-        conn.execute(
-            "UPDATE pedidos SET status = ? WHERE id = ?",
-            (novo_status, pedido_id)
-        )
-        conn.commit()
+    """Atualiza o status de um pedido (ação humana) com tratamento de erro."""
+    try:
+        with _conn() as conn:
+            conn.execute(
+                "UPDATE pedidos SET status = ? WHERE id = ?",
+                (novo_status, pedido_id)
+            )
+            conn.commit()
+    except Exception as exc:
+        logger.error("Erro ao atualizar status do pedido #%s: %s", pedido_id, exc)
 
 
 def get_auditoria_resumo() -> dict:
-    """Totais de tokens e custo da sessão."""
-    with _conn() as conn:
-        row = conn.execute("""
-            SELECT COUNT(*) as chamadas,
-                   COALESCE(SUM(prompt_tokens), 0) as prompt_tk,
-                   COALESCE(SUM(completion_tokens), 0) as comp_tk,
-                   COALESCE(SUM(custo_estimado_usd), 0) as custo_total
-            FROM auditoria_ia
-        """).fetchone()
-        return dict(row) if row else {}
+    """Totais de tokens e custo da sessão com fallback seguro."""
+    try:
+        with _conn() as conn:
+            row = conn.execute("""
+                SELECT COUNT(*) as chamadas,
+                       COALESCE(SUM(prompt_tokens), 0) as prompt_tk,
+                       COALESCE(SUM(completion_tokens), 0) as comp_tk,
+                       COALESCE(SUM(custo_estimado_usd), 0) as custo_total
+                FROM auditoria_ia
+            """).fetchone()
+            return dict(row) if row else {
+                "chamadas": 0,
+                "prompt_tk": 0,
+                "comp_tk": 0,
+                "custo_total": 0.0,
+            }
+    except Exception as exc:
+        logger.error("Erro ao obter resumo de auditoria: %s", exc)
+        return {
+            "chamadas": 0,
+            "prompt_tk": 0,
+            "comp_tk": 0,
+            "custo_total": 0.0,
+        }
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -668,7 +705,12 @@ def get_auditoria_resumo() -> dict:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def init_session():
-    """Inicializa variáveis de sessão."""
+    """Inicializa variáveis de sessão e garante infraestrutura de banco de dados."""
+    try:
+        db.ensure_db()
+    except Exception as exc:
+        logger.error("Erro ao verificar/inicializar banco de dados no init_session: %s", exc)
+
     if "session_id" not in st.session_state:
         st.session_state.session_id = str(uuid.uuid4())[:8]
 

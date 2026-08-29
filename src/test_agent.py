@@ -22,6 +22,11 @@ import sqlite3
 # Garante imports do diretório src/
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 import database as db
 from agent import RashBotAgent
 

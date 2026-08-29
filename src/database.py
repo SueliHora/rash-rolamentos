@@ -48,12 +48,15 @@ def init_db(db_file: Optional[pathlib.Path] = None, schema_file: Optional[pathli
         logger.error("Arquivo de schema não encontrado: %s", target_schema)
         raise FileNotFoundError(f"Schema não encontrado em: {target_schema}")
 
-    with sqlite3.connect(target_db) as conn:
+    conn = sqlite3.connect(target_db)
+    try:
         conn.execute("PRAGMA foreign_keys = ON")
         schema_sql = target_schema.read_text(encoding="utf-8")
         conn.executescript(schema_sql)
         conn.commit()
         logger.info("Schema do banco aplicado com sucesso em: %s", target_db)
+    finally:
+        conn.close()
 
 
 def seed_data(db_file: Optional[pathlib.Path] = None) -> int:
@@ -66,16 +69,61 @@ def seed_data(db_file: Optional[pathlib.Path] = None) -> int:
     if data_dir not in sys.path:
         sys.path.insert(0, data_dir)
 
+    conn = sqlite3.connect(target_db)
     try:
         import seed as seed_mod
-        with sqlite3.connect(target_db) as conn:
-            conn.execute("PRAGMA foreign_keys = ON")
-            inserted = seed_mod.seed_produtos(conn, seed_mod.PRODUTOS)
-            logger.info("Catálogo inicial populado com sucesso em %s (%d produtos).", target_db, len(seed_mod.PRODUTOS))
-            return inserted
+        conn.execute("PRAGMA foreign_keys = ON")
+        inserted = seed_mod.seed_produtos(conn, seed_mod.PRODUTOS)
+        logger.info("Catálogo inicial populado com sucesso em %s (%d produtos).", target_db, len(seed_mod.PRODUTOS))
+        return inserted
     except Exception as exc:
         logger.error("Erro ao popular catálogo de produtos via seed_data: %s", exc)
         return 0
+    finally:
+        conn.close()
+
+
+def ensure_db(db_file: Optional[pathlib.Path] = None, schema_file: Optional[pathlib.Path] = None) -> None:
+    """
+    Garante que o banco de dados e todas as tabelas necessárias existam.
+    Caso o arquivo ou tabelas essenciais não existam ou estejam vazias,
+    executa init_db() e seed_data() automaticamente.
+    """
+    target_db = db_file or DB_PATH
+    target_schema = schema_file or SCHEMA_PATH
+
+    target_db.parent.mkdir(parents=True, exist_ok=True)
+
+    needs_init = False
+    if not target_db.exists() or target_db.stat().st_size == 0:
+        needs_init = True
+    else:
+        conn = None
+        try:
+            conn = sqlite3.connect(target_db)
+            cursor = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('produtos', 'pedidos', 'itens_pedido', 'auditoria_ia')"
+            )
+            tables = {row[0] for row in cursor.fetchall()}
+            required_tables = {'produtos', 'pedidos', 'itens_pedido', 'auditoria_ia'}
+            if not required_tables.issubset(tables):
+                needs_init = True
+            else:
+                prod_count = conn.execute("SELECT COUNT(*) FROM produtos").fetchone()[0]
+                if prod_count == 0:
+                    conn.close()
+                    conn = None
+                    seed_data(target_db)
+        except Exception as exc:
+            logger.warning("Falha ao verificar tabelas em %s: %s. Reconstruindo banco...", target_db, exc)
+            needs_init = True
+        finally:
+            if conn is not None:
+                conn.close()
+
+    if needs_init:
+        init_db(target_db, target_schema)
+        seed_data(target_db)
 
 
 # ── Helpers internos ──────────────────────────────────────────────────────────
@@ -92,18 +140,10 @@ def _normalize(text: str) -> str:
 def _get_connection() -> sqlite3.Connection:
     """
     Retorna uma conexão com row_factory configurada para dicts.
-    Se o arquivo de banco de dados não for encontrado, cria o diretório data/
-    e executa init_db() e seed_data() automaticamente de forma resiliente.
+    Garante que o banco e as tabelas existam antes de conectar.
     Registra a função escalar `normalize_text` para buscas sem acento.
     """
-    if not DB_PATH.exists():
-        logger.warning(
-            "Banco de dados não encontrado em %s. Criando diretório e inicializando schema e catálogo automaticamente...",
-            DB_PATH
-        )
-        init_db()
-        seed_data()
-
+    ensure_db()
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row          # acesso por nome de coluna
     conn.execute("PRAGMA foreign_keys = ON")
@@ -482,6 +522,12 @@ def resumo_banco() -> dict:
                 "estoque_total":     estoque or 0,
                 "db_path":           str(DB_PATH),
             }
-    except sqlite3.Error as exc:
+    except Exception as exc:
         logger.error("Erro ao gerar resumo do banco: %s", exc)
-        raise
+        return {
+            "total_produtos":    0,
+            "total_pedidos":     0,
+            "total_auditorias":  0,
+            "estoque_total":     0,
+            "db_path":           str(DB_PATH),
+        }

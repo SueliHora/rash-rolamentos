@@ -19,6 +19,11 @@ import logging
 # Garante que 'src/' está no path independentemente de onde o teste é executado
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 import database as db
 
 # Silencia logs durante os testes (só mostra WARNING+)
@@ -383,6 +388,29 @@ class TestResumoBanco(unittest.TestCase):
         self.assertGreater(resumo["estoque_total"], 0)
 
 
+class TestEnsureDbResilience(unittest.TestCase):
+
+    def test_ensure_db_com_novo_arquivo_temporario(self):
+        """ensure_db deve criar o schema e popular o catálogo em um banco novo."""
+        import tempfile
+        sep("TESTE: ensure_db em arquivo temporário")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            temp_db = pathlib.Path(tmpdir) / "sub" / "rash_temp.db"
+            self.assertFalse(temp_db.exists())
+
+            db.ensure_db(db_file=temp_db)
+            self.assertTrue(temp_db.exists())
+
+            import sqlite3 as _sq
+            conn = _sq.connect(temp_db)
+            try:
+                count = conn.execute("SELECT COUNT(*) FROM produtos").fetchone()[0]
+                self.assertEqual(count, 15)
+                print(f"  Banco temporário criado e populado com {count} produtos.")
+            finally:
+                conn.close()
+
+
 # =============================================================================
 #  Runner customizado com sumário colorido
 # =============================================================================
@@ -424,6 +452,7 @@ if __name__ == "__main__":
         TestCriarCotacao,
         TestRegistrarAuditoria,
         TestResumoBanco,
+        TestEnsureDbResilience,
     ]:
         suite.addTests(loader.loadTestsFromTestCase(caso))
 
