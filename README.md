@@ -177,3 +177,10 @@ Acesse a interface no navegador em: [http://localhost:8501](http://localhost:850
 ## Reconhecimentos & Créditos
 
 Projeto desenvolvido como parte do desafio prático da **Jornada de Dados**, com customização arquitetural, catálogo determinístico B2B, interface corporativa e governança HITL implementados de forma autônoma.
+
+---
+
+## 🔗 Links Oficiais
+
+- **Aplicação ao Vivo:** [Acessar no Streamlit Cloud](https://rash-rolamentos.streamlit.app/)
+- **Repositório do Código Fonte:** [GitHub - SueliHora/rash-rolamentos](https://github.com/SueliHora/rash-rolamentos)
