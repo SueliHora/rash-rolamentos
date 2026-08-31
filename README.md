@@ -42,6 +42,23 @@ Diferente de chatbots conversacionais genéricos que alucinam especificações, 
 ```
 
 ---
+---
+
+## 📸 Prévia da Aplicação em Ação
+
+Abaixo estão as capturas de tela demonstrando o fluxo completo de atendimento do **RashBot** na interface Streamlit, desde a página inicial e painel operacional até a consulta técnica, validação de estoque e registro de cotações:
+
+![Tela Inicial do Painel Operacional](assets/app_preview1.jpg)
+
+![Consulta e Recomendação Técnica](assets/app_preview2.jpg)
+
+![Validação de Estoque e Dados do Cliente](assets/app_preview3.jpg)
+
+![Interação do Chat e Resposta do Agente](assets/app_preview4.jpg)
+
+![Visão Geral da Sessão e Custos](assets/app_preview5.jpg)
+
+---
 
 ## Stack Tecnológica
 
