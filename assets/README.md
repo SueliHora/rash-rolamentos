@@ -11,7 +11,11 @@ assets/
 ├── logo.png                # High-resolution brand logo
 ├── logo_clean.png          # Transparent background variant for dark/light themes
 ├── logo_icon.png           # 1:1 Favicon and avatar icon
-└── app_preview_flow.jpg    # Consolidated end-to-end operational workflow (Dashboard to HITL)
+├── app_preview1.jpg        # Operational Dashboard & Consultation Entrypoint
+├── app_preview2.jpg        # Technical Recommendation & Dimensional Matching
+├── app_preview3.jpg        # Inventory Verification & Customer Details Input
+├── app_preview4.jpg        # Conversational Chat Flow & Real-time Reasoning
+└── app_preview5.jpg        # Session Overview, Token Audit & Cost Observability
 ```
 
 ---

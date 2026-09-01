@@ -106,14 +106,17 @@ graph TD
 
 ---
 
-### 📸 Application Preview & User Experience
+### 📸 Application Operational Flow (Streamlit)
 
-Below is the consolidated operational flow of RashBot, showing the end-to-end customer journey: initial screening, parametric engineering search, deterministic stock validation, and real-time reasoning with HITL governance.
+| 1. Operational Dashboard & Screening | 2. Technical Recommendation |
+| :---: | :---: |
+| <img src="assets/app_preview1.jpg" width="100%"> | <img src="assets/app_preview2.jpg" width="100%"> |
+| **3. Deterministic Inventory Check** | **4. Real-time Reasoning & HITL Governance** |
+| <img src="assets/app_preview3.jpg" width="100%"> | <img src="assets/app_preview4.jpg" width="100%"> |
 
-| Consolidated Operational Flow (1-4) |
+| 5. Governance Dashboard, Metrics & Session Costs |
 | :---: |
-| <img src="assets/app_preview_flow.jpg" alt="RashBot Agent Operational Flow" width="100%"> |
-| **User Journey:** 1. Dashboard & Screening | 2. Parametric Search | 3. Stock Validation | 4. Real-time Reasoning & HITL |
+| <img src="assets/app_preview5.jpg" width="100%"> |
 
 ---
 
@@ -198,7 +201,7 @@ rash-rolamentos/
 ├── assets/
 │   ├── README.md              # Asset standards and screenshot guidelines
 │   ├── logo_clean.png         # Brand logo
-│   └── app_preview_flow.jpg   # Consolidated operational workflow image (1-4)
+│   └── app_preview*.jpg       # Operational workflow screenshots (1 to 5)
 ├── data/
 │   ├── rash.db                # SQLite database (auto-generated)
 │   ├── schema.sql             # Relational DDL schema
