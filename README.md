@@ -106,19 +106,14 @@ graph TD
 
 ---
 
-## 📸 Application Preview & User Experience
+### 📸 Application Preview & User Experience
 
-Explore the operational interface built with custom Streamlit design components:
+Below is the consolidated operational flow of RashBot, showing the end-to-end customer journey: initial screening, parametric engineering search, deterministic stock validation, and real-time reasoning with HITL governance.
 
-| Operational Dashboard | Technical Recommendation |
-| :---: | :---: |
-| ![Dashboard](assets/app_preview1.jpg) | ![Recommendation](assets/app_preview2.jpg) |
-| *1. Clean consultation dashboard* | *2. Exact parametric search & matching* |
-
-| Inventory & Buyer Details | Interactive Chat & Governance |
-| :---: | :---: |
-| ![Inventory](assets/app_preview3.jpg) | ![Chat & Audit](assets/app_preview4.jpg) |
-| *3. Stock check & customer data input* | *4. Real-time reasoning & HITL quotation* |
+| Consolidated Operational Flow (1-4) |
+| :---: |
+| <img src="assets/app_preview_flow.jpg" alt="RashBot Agent Operational Flow" width="100%"> |
+| **User Journey:** 1. Dashboard & Screening | 2. Parametric Search | 3. Stock Validation | 4. Real-time Reasoning & HITL |
 
 ---
 
@@ -203,7 +198,7 @@ rash-rolamentos/
 ├── assets/
 │   ├── README.md              # Asset standards and screenshot guidelines
 │   ├── logo_clean.png         # Brand logo
-│   └── app_preview*.jpg       # UI walkthrough screenshots
+│   └── app_preview_flow.jpg   # Consolidated operational workflow image (1-4)
 ├── data/
 │   ├── rash.db                # SQLite database (auto-generated)
 │   ├── schema.sql             # Relational DDL schema

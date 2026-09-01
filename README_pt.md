@@ -106,19 +106,14 @@ graph TD
 
 ---
 
-## 📸 Prévia da Aplicação & Experiência do Usuário
+### 📸 Prévia da Aplicação & Experiência do Usuário
 
-Abaixo estão capturas da interface operacional desenvolvida em Streamlit com componentes visuais customizados:
+Abaixo está o fluxo operacional consolidado do RashBot, apresentando a jornada completa do atendimento: triagem inicial, busca paramétrica consultiva, validação determinística de estoque e raciocínio em tempo real com governança HITL.
 
-| Painel Operacional | Recomendação Técnica |
-| :---: | :---: |
-| ![Dashboard](assets/app_preview1.jpg) | ![Recomendação](assets/app_preview2.jpg) |
-| *1. Painel de atendimento e triagem* | *2. Busca paramétrica e especificações* |
-
-| Estoque & Dados do Cliente | Chat Interativo & Governança |
-| :---: | :---: |
-| ![Estoque](assets/app_preview3.jpg) | ![Chat e Auditoria](assets/app_preview4.jpg) |
-| *3. Validação de estoque e formulário* | *4. Raciocínio em tempo real e cotação HITL* |
+| Fluxo Operacional Consolidado (1-4) |
+| :---: |
+| <img src="assets/app_preview_flow.jpg" alt="Fluxo Operacional do Agente RashBot" width="100%"> |
+| **Jornada do Atendimento:** 1. Painel e Triagem | 2. Busca e Especificações | 3. Estoque e Formulário | 4. Raciocínio e HITL |
 
 ---
 
@@ -203,7 +198,7 @@ rash-rolamentos/
 ├── assets/
 │   ├── README.md              # Padrões e orientações para capturas de tela
 │   ├── logo_clean.png         # Logo oficial com fundo transparente
-│   └── app_preview*.jpg       # Imagens de demonstração da interface
+│   └── app_preview_flow.jpg   # Imagem consolidada do fluxo operacional (1-4)
 ├── data/
 │   ├── rash.db                # Banco de dados SQLite persistente
 │   ├── schema.sql             # DDL relacional das tabelas
