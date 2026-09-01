@@ -2,7 +2,9 @@
 
 # ⚙️ Rash Rolamentos Industriais — B2B Technical Sales Agent & Governance
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://rash-rolamentos.streamlit.app/)
 [![Read in Portuguese](https://img.shields.io/badge/Language-Portugu%C3%AAs%20%F0%9F%87%A7%F0%9F%87%B7-blue?style=for-the-badge)](./README_pt.md)
+[![Project Type](https://img.shields.io/badge/Type-Technical%20Challenge%20%7C%20Business%20Case-0A66C2?style=for-the-badge)](https://rash-rolamentos.streamlit.app/)
 
 <br/>
 
@@ -19,7 +21,7 @@
 [![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
 
 <p align="center">
-  <strong>Autonomous B2B Technical Sales Assistant with Deterministic Catalog Resolution, LangGraph State Orchestration, and Human-in-the-Loop (HITL) Governance.</strong>
+  <strong>Technical Challenge & Business Case Solution: Autonomous B2B Technical Sales Agent with Deterministic Catalog Resolution, LangGraph State Orchestration, and Human-in-the-Loop (HITL) Governance.</strong>
 </p>
 
 </div>
@@ -28,18 +30,22 @@
 
 ## 🧭 Navigation
 
+- 🌐 **[Live Demo on Streamlit Cloud](https://rash-rolamentos.streamlit.app/)**
 - 📄 **[Product Requirements Document (PRD)](./docs/PRD.md)**
 - 🏛️ **[Technical Architecture & Data Flow](./docs/ARCHITECTURE.md)**
-- 🤝 **[Contributing Guidelines](./CONTRIBUTING.md)**
 - 🇧🇷 **[Versão em Português](./README_pt.md)**
 
 ---
 
-## 📌 Project Overview
+## 💼 Business Case & Technical Challenge Context
 
-In technical industrial distribution, generative AI chatbots frequently fail because they **hallucinate dimensional tolerances, mechanical load ratings, and commercial pricing**. Quoting the wrong clearance ($C3$ vs. normal) or incorrect shaft diameter can cause catastrophic machinery breakdown on the factory floor.
+This repository presents an end-to-end **Technical Challenge & Business Case Solution** designed for industrial B2B sales automation at **Rash Rolamentos Industriais**.
 
-**RashBot** resolves this fundamental limitation by pairing conversational natural-language understanding with a **100% Deterministic SQLite Catalog Layer** and **Human-in-the-Loop (HITL)** governance:
+### The Core Problem
+In mechanical and heavy-machinery distribution, generic conversational AI chatbots fail because they **hallucinate dimensional tolerances, mechanical load ratings, and commercial pricing**. Quoting the wrong clearance ($C3$ vs. normal) or incorrect shaft diameter can cause catastrophic machinery breakdown on the factory floor.
+
+### The Agentic Solution
+**RashBot** resolves this fundamental business problem by combining conversational natural-language understanding with a **100% Deterministic SQLite Catalog Layer** and strict **Human-in-the-Loop (HITL)** governance:
 
 - 🎯 **Zero Catalog Hallucination:** Dimensions ($d, D, B$), radial clearance, load capacities, inventory, and prices are resolved exclusively via parameterized relational SQL.
 - ⚡ **Consultative Engineering Search:** Converts vague operating descriptions (e.g., *"high-vibration jaw crusher in mining"*) into exact ISO bearing codes (`22212-E`, `6204-2RSH`).
@@ -218,7 +224,6 @@ rash-rolamentos/
 ├── .gitignore                 # Git ignore rules
 ├── AGENTS.md                  # Development guidelines for AI Agents
 ├── app.py                     # Streamlit web application & HITL dashboard
-├── CONTRIBUTING.md            # Contribution guidelines
 ├── LICENSE                    # MIT License
 ├── pyproject.toml             # uv package configuration & tool settings
 ├── README.md                  # Official documentation (English)

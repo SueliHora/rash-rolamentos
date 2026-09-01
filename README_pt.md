@@ -2,7 +2,9 @@
 
 # ⚙️ Rash Rolamentos Industriais — Agente de Vendas Técnicas & Governança B2B
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://rash-rolamentos.streamlit.app/)
 [![Read in English](https://img.shields.io/badge/Language-English%20%F0%9F%87%BA%F0%9F%87%B8-blue?style=for-the-badge)](./README.md)
+[![Tipo de Projeto](https://img.shields.io/badge/Tipo-Desafio%20T%C3%A9cnico%20%7C%20Business%20Case-0A66C2?style=for-the-badge)](https://rash-rolamentos.streamlit.app/)
 
 <br/>
 
@@ -15,11 +17,11 @@
 [![Ruff](https://img.shields.io/badge/Linter-Ruff-261230?style=flat-square&logo=ruff&logoColor=white)](https://astral.sh/ruff)
 [![LangGraph](https://img.shields.io/badge/Orquestrador-LangGraph-FF4B4B?style=flat-square&logo=langchain&logoColor=white)](https://langchain-ai.github.io/langgraph/)
 [![Streamlit](https://img.shields.io/badge/Frontend-Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![License: MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-yellow.svg?style=flat-square)](LICENSE)
+[![Licença: MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
 
 <p align="center">
-  <strong>Assistente Autônomo de Vendas Técnicas B2B com Catálogo Determinístico, Orquestração LangGraph e Governança Human-in-the-Loop (HITL).</strong>
+  <strong>Solução de Desafio Técnico & Case de Negócio: Assistente Autônomo de Vendas Técnicas B2B com Catálogo Determinístico, Orquestração LangGraph e Governança Human-in-the-Loop (HITL).</strong>
 </p>
 
 </div>
@@ -28,18 +30,22 @@
 
 ## 🧭 Navegação
 
+- 🌐 **[Aplicação Online no Streamlit Cloud](https://rash-rolamentos.streamlit.app/)**
 - 📄 **[Documento de Requisitos do Produto (PRD)](./docs/PRD.md)**
 - 🏛️ **[Arquitetura Técnica & Fluxo de Dados](./docs/ARCHITECTURE.md)**
-- 🤝 **[Guia de Contribuição](./CONTRIBUTING.md)**
 - 🇺🇸 **[Read in English](./README.md)**
 
 ---
 
-## 📌 Visão Geral do Projeto
+## 💼 Contexto de Negócio & Desafio Técnico
 
-No setor de distribuição industrial técnica, chatbots generativos genéricos falham com frequência por **alucinarem tolerâncias dimensionais, capacidades de carga mecânica e tabelas de preços**. Cotar uma folga incorreta ($C3$ vs. normal) ou um diâmetro de eixo errado pode paralisar linhas de produção industriais inteiras.
+Este repositório apresenta a solução completa de um **Desafio Técnico & Business Case** para automação de atendimento e vendas técnicas B2B na **Rash Rolamentos Industriais**.
 
-O **RashBot** soluciona essa restrição combinando compreensão consultiva em linguagem natural com uma **Camada de Catálogo Determinístico em SQLite** e governança **Human-in-the-Loop (HITL)**:
+### O Problema Central
+No setor de distribuição industrial de precisão, chatbots conversacionais genéricos falham criticamente por **alucinarem tolerâncias dimensionais, capacidades de carga mecânica e tabelas de preços**. Cotar uma folga incorreta ($C3$ vs. normal) ou um diâmetro de eixo errado pode paralisar linhas de produção industriais inteiras.
+
+### A Solução Agêntica
+O **RashBot** resolve esse desafio combinando compreensão consultiva em linguagem natural com uma **Camada de Catálogo Determinístico em SQLite** e governança **Human-in-the-Loop (HITL)**:
 
 - 🎯 **Zero Alucinação de Catálogo:** Dimensões ($d, D, B$), folga radial, capacidade de carga, estoque e preços são consultados exclusivamente via queries relacionais parametrizadas.
 - ⚡ **Busca Consultiva de Engenharia:** Converte descrições operacionais em linguagem natural (ex: *"britador de mandíbula em mineração com alta vibração"*) nos códigos ISO exatos (`22212-E`, `6204-2RSH`).
@@ -218,7 +224,6 @@ rash-rolamentos/
 ├── .gitignore                 # Regras de ignorados pelo Git
 ├── AGENTS.md                  # Diretrizes para agentes de IA no repositório
 ├── app.py                     # Aplicação Web Streamlit & Painel HITL
-├── CONTRIBUTING.md            # Guia de contribuição para desenvolvedores
 ├── LICENSE                    # Licença MIT
 ├── pyproject.toml             # Configurações de dependências e ferramentas uv
 ├── README.md                  # Documentação oficial (Inglês)
