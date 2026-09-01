@@ -20,22 +20,19 @@ Fluxo com MemorySaver para manter contexto da conversa
 entre múltiplas interações (thread_id por sessão).
 """
 
-import os
-import sys
 import logging
+import os
 import pathlib
-from typing import Annotated, Literal
+import sys
+from typing import Annotated
 
 from dotenv import load_dotenv
-
-from langchain_core.messages import SystemMessage, AIMessage, ToolMessage
+from langchain_core.messages import AIMessage, SystemMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
-
-from langgraph.graph import StateGraph, START, END
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
-from langgraph.checkpoint.memory import MemorySaver
-
 from typing_extensions import TypedDict
 
 # Garante imports relativos quando executado de src/
@@ -237,7 +234,7 @@ def llm_node(state: AgentState) -> dict:
     import time
     global ACTIVE_MODEL, UNAVAILABLE_MODELS
     mensagens = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
-    
+
     env_model = get_config_var("GEMINI_MODEL", "gemini-1.5-flash")
 
     # Monta lista de prioridades de modelo evitando os sabidamente 404
@@ -250,7 +247,7 @@ def llm_node(state: AgentState) -> dict:
     for fallback in [env_model, "gemini-1.5-flash", "gemini-2.5-flash", "gemini-flash-latest", "gemini-3.6-flash"]:
         if fallback and fallback not in candidate_list and fallback not in UNAVAILABLE_MODELS:
             candidate_list.append(fallback)
-            
+
     last_exception = None
     for model_name in candidate_list:
         try:
@@ -286,7 +283,7 @@ def llm_node(state: AgentState) -> dict:
             f"`{err_msg[:120]}`\n\n"
             "Por favor, tente novamente em instantes."
         )
-        
+
     return {"messages": [AIMessage(content=msg_content)]}
 
 
@@ -348,7 +345,7 @@ class RashBotAgent:
 
         resposta = resultado["messages"][-1]
         raw_content = resposta.content if hasattr(resposta, "content") else str(resposta)
-        
+
         # Extrai apenas texto limpo
         texto_limpo = extract_text_from_message_content(raw_content)
 

@@ -15,10 +15,10 @@ Convenções:
   termos digitados sem acentuação (ex: 'motor eletrico' == 'motor elétrico').
 """
 
-import sys
-import sqlite3
-import pathlib
 import logging
+import pathlib
+import sqlite3
+import sys
 import unicodedata
 from typing import Optional
 

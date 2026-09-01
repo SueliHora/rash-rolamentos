@@ -1,0 +1,43 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-test:
+    name: Code Quality & Automated Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: "latest"
+
+      - name: Set up Python 3.11
+        run: uv python install 3.11
+
+      - name: Install Dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Seed SQLite Database
+        run: uv run python data/seed.py
+
+      - name: Run Ruff Linter
+        run: uv run ruff check .
+
+      - name: Run Pytest Test Suite
+        env:
+          GEMINI_API_KEY: "ci_dummy_key_for_testing"
+          GEMINI_MODEL: "gemini-1.5-flash"
+          LOG_LEVEL: "INFO"
+        run: uv run pytest -v

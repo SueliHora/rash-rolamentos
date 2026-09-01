@@ -11,10 +11,10 @@ Uso:
     uv run python src/test_db.py
 """
 
-import sys
-import pathlib
-import unittest
 import logging
+import pathlib
+import sys
+import unittest
 
 # Garante que 'src/' está no path independentemente de onde o teste é executado
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -464,7 +464,7 @@ if __name__ == "__main__":
     falhas  = len(result.failures) + len(result.errors)
     passou  = total - falhas
 
-    print(f"\n  Resultado Final:")
+    print("\n  Resultado Final:")
     print(f"  {GREEN}Passou : {passou}/{total}{RESET}")
     if falhas:
         print(f"  {RED}Falhou : {falhas}/{total}{RESET}")

@@ -14,10 +14,9 @@ Uso:
     uv run python src/test_agent.py
 """
 
-import sys
-import time
 import pathlib
 import sqlite3
+import sys
 
 # Garante imports do diretório src/
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -284,8 +283,8 @@ def cenario_6_auditoria(agente: RashBotAgent) -> None:
 
 def main() -> None:
     header("RashBot — Teste Funcional Completo do Agente")
-    print(f"\n  Este teste simula uma conversa real de vendas industriais")
-    print(f"  cobrindo todos os fluxos do MVP (PRD v1).\n")
+    print("\n  Este teste simula uma conversa real de vendas industriais")
+    print("  cobrindo todos os fluxos do MVP (PRD v1).\n")
 
     # Instancia o agente com thread_id fixo para rastreabilidade
     agente = RashBotAgent(thread_id="test-funcional-001")
@@ -325,7 +324,7 @@ def main() -> None:
     print(f"\n  {BOLD}Cenários: {passou}/{total} concluídos com sucesso{RESET}")
 
     resumo = db.resumo_banco()
-    print(f"\n  Estado final do banco:")
+    print("\n  Estado final do banco:")
     print(f"    Produtos    : {resumo['total_produtos']}")
     print(f"    Pedidos     : {resumo['total_pedidos']}")
     print(f"    Auditorias  : {resumo['total_auditorias']}")

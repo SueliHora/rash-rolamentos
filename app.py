@@ -5,16 +5,14 @@ Rash Rolamentos Industriais — Agente de Vendas Técnicas ("Soluções em Movim
 Interface Web Corporativa B2B com Enquadramento Inicial, Tipografia e Responsividade Mobile Otimizadas.
 """
 
-import os
-import sys
-import uuid
 import base64
-import sqlite3
-import pathlib
 import logging
+import pathlib
+import sqlite3
+import sys
 import textwrap
+import uuid
 from datetime import datetime
-from typing import Optional
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -27,7 +25,7 @@ sys.path.insert(0, str(_ROOT / "src"))
 load_dotenv(_ROOT / ".env")
 
 import database as db
-from agent import RashBotAgent, GEMINI_MODEL
+from agent import GEMINI_MODEL, RashBotAgent
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(level=logging.WARNING)
@@ -1040,7 +1038,7 @@ def handle_user_input(user_input: str):
 
 def render_main_chat():
     """Renderiza a área de chat corporativa B2B."""
-    
+
     # ── Container de Mensagens com Margem Inferior ─────────────────────────
     st.markdown('<div class="chat-scroll-area">', unsafe_allow_html=True)
 
@@ -1097,17 +1095,17 @@ def render_main_chat():
 
 def main():
     init_session()
-    
+
     # Obtém cotações pendentes para badge dinâmico
     pendentes = get_cotacoes_pendentes()
     qtd_pendentes = len(pendentes)
 
     # Barra lateral (desktop)
     render_sidebar()
-    
+
     # Cabeçalho Principal Integrado
     render_main_header()
-    
+
     # Barra de Navegação de Abas (exclusiva mobile via CSS)
     render_top_navigation(qtd_pendentes)
 

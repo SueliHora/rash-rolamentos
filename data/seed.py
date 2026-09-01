@@ -13,8 +13,8 @@ Uso:
     python data/seed.py
 """
 
-import sqlite3
 import pathlib
+import sqlite3
 import sys
 import textwrap
 
@@ -240,7 +240,7 @@ def print_summary(conn: sqlite3.Connection) -> None:
     estoque_total = cursor.fetchone()[0]
 
     print("\n" + "-" * 60)
-    print(f"  RESUMO DO BANCO -- rash.db")
+    print("  RESUMO DO BANCO -- rash.db")
     print("-" * 60)
     print(f"  Total de produtos     : {total_produtos}")
     print(f"  Estoque total (pecas) : {estoque_total}")
