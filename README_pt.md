@@ -235,6 +235,7 @@ rash-rolamentos/
 ## 👩‍💻 Autoria & Licença
 
 - **Autora:** [SueliHora](https://github.com/SueliHora)
+- **Contexto / Desafio:** Desenvolvido como solução do desafio técnico da comunidade **[Jornada de Dados](https://jornadadedados.com.br/)**.
 - **Repositório:** [https://github.com/SueliHora/rash-rolamentos](https://github.com/SueliHora/rash-rolamentos)
 - **Aplicação Online:** [Streamlit Cloud](https://rash-rolamentos.streamlit.app/)
 - **Licença:** Distribuído sob a [Licença MIT](LICENSE).

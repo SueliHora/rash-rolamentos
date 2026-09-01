@@ -235,6 +235,7 @@ rash-rolamentos/
 ## 👩‍💻 Author & License
 
 - **Author:** [SueliHora](https://github.com/SueliHora)
+- **Context / Challenge:** Developed as a technical challenge solution for the **[Jornada de Dados](https://jornadadedados.com.br/)** community.
 - **Repository:** [https://github.com/SueliHora/rash-rolamentos](https://github.com/SueliHora/rash-rolamentos)
 - **Live Demo:** [Streamlit Cloud](https://rash-rolamentos.streamlit.app/)
 - **License:** Distributed under the [MIT License](LICENSE).
